@@ -5,17 +5,25 @@ RequestDelay = 2
 
 # for whole project
 Debug = True
-ProcessFilePath = "./utils/process.json"
-
-SrcFilePath = "./src/hospital_remains.csv"
-DstLetterPath = "./dst/hospital.csv"
-DstExperiencePath = "./dst/doctor.csv"
-
-DocErrLogPath = "./dst/docerrlog.txt"
-HosErrLogPath = "./dst/hoserrlog.txt"
-
 def DebugPrint(*objects, sep=' ', end='\n'):
     if Debug:
         print(*objects, sep=sep, end=end)
 
-# DebugPrint("hhhh", ["jhh", "dd"], end="\n\n")
+# for process.py
+ProcessFilePath = "./utils/process.json"
+
+# for Main.py and HandleErr
+SrcFilePath = "./src/hospital_url.csv"
+
+# for ItemProcess.py
+DstLetterPath = "./dst/hospital.csv"
+DstExperiencePath = "./dst/doctor.csv"
+
+# for HandleErr.py
+DoctorErrLog = "./logs/doctor_err.log"
+LetterPageErrLog = "./logs/letter_page_err.log"
+ExperiencePageErrLog = "./logs/experience_page_err.log"
+
+# for HandleErr.py and Main.py
+RestoreLetterPageErrLog = "./logs/letter_page_err2.log"
+RestoreExperiencePageErrLog = "./logs/experience_page_err2.log"
