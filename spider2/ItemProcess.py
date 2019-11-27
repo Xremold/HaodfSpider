@@ -9,8 +9,10 @@ import re
 '''
 
 def ProcessLetterPage(items):
-    items = [item.values() for item in items]
+    items = [list(item.values()) for item in items]
+    # DebugPrint(items)
     for item in items:
+        # DebugPrint(item[3])
         item[3] = item[3][3:]
         item[4] = item[4].strip()
         item[6] = item[6].strip()
@@ -21,7 +23,7 @@ def ProcessLetterPage(items):
     pass
 
 def ProcessExperiencePage(items):
-    items = [item.values() for item in items]
+    items = [list(item.values()) for item in items]
     for item in items:
         item[3] = item[3][3:]
         item[4] = item[4].strip()

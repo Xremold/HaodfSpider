@@ -13,11 +13,11 @@ def DebugPrint(*objects, sep=' ', end='\n'):
 ProcessFilePath = "./utils/process.json"
 
 # for Main.py and HandleErr
-SrcFilePath = "./src/hospital_url.csv"
+SrcFilePath = "./src/doctors_url.csv"
 
 # for ItemProcess.py
-DstLetterPath = "./dst/hospital.csv"
-DstExperiencePath = "./dst/doctor.csv"
+DstLetterPath = "./dst/letter.csv"
+DstExperiencePath = "./dst/experience.csv"
 
 # for HandleErr.py
 DoctorErrLog = "./logs/doctor_err.log"

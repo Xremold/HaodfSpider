@@ -2,17 +2,18 @@ from Settings import *
 from Request import Request
 
 # 
-def ParseLetterPage(response, doc_name, hos_name, dept_name, items=[]):
-    return ParseExperiencePage(response, doc_name, hos_name, dept_name, items)
+def ParseLetterPage(response, doc_name, hos_name, dept_name):
+    return ParseExperiencePage(response, doc_name, hos_name, dept_name)
 
 # 
-def ParseExperiencePage(response, doc_name, hos_name, dept_name, items=[]):
+def ParseExperiencePage(response, doc_name, hos_name, dept_name):
     '''
     returns:
         list: content
         Bool: if retry
         Bool: if end
     '''
+    items = []
     table_list = response.css("table.doctorjy")
     if len(table_list) == 0:
         return items, True, False
@@ -34,15 +35,12 @@ def ParseExperiencePage(response, doc_name, hos_name, dept_name, items=[]):
         item['comment'] = table.css("td.spacejy::text").extract()
         items.append(item)
     return items, False, False
-    
-
-    pass
 
 def test():
     # url = "https://www.haodf.com/jingyan/kanbingjingyan-xubaohua/5.htm"
     url = "https://www.haodf.com/jingyan/ganxiexin-zhangyongming-6.htm"
     respose = Request(url)
-    item = ParseExperiencePage(respose, "家医生", "医院", "科室", [])
+    item = ParseExperiencePage(respose, "家医生", "医院", "科室")
     print(item)
     pass
 

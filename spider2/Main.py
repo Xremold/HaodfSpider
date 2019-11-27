@@ -24,6 +24,7 @@ def LetterPageLevel(url, doc_name, hos_name, dept_name):
         else:
             ProcessLetterPage(items)
             process.FinishADoctorLetPage()
+            # DebugPrint("====letter page finished", "write items:", len(items), "条")
             if end:
                 return
         
@@ -52,6 +53,7 @@ def ExperiencePageLevel(url, doc_name, hos_name, dept_name):
         else:
             ProcessExperiencePage(items)
             process.FinishADoctorExpPage()
+            # DebugPrint("====experience page finished, write items:", len(items), "条")
             if end:
                 return
         
@@ -73,14 +75,16 @@ def DoctorLevel(url, hos_name, dept_name):
         err.LogDoctorErr(url, hos_name, dept_name)
         pass
 
-    experience_url = response.css("div.nav2:nth-child(3) > a:nth-child(2)::attr(href)").extract_first("")
+    experience_url = response.css("#toptr_type_all > div.lt > div:nth-child(3) > a::attr(href)").extract_first("")
     if experience_url != "":
-        ExperiencePageLevel("'https:"+experience_url, doc_name, hos_name, dept_name)
-    letter_url = response.css("div.nav2:nth-child(5) > a:nth-child(2)::attr(href)").extract_first("")
+        ExperiencePageLevel("https:"+experience_url, doc_name, hos_name, dept_name)
+    letter_url = response.css("#toptr_type_all > div.lt > div:nth-child(5) > a::attr(href)").extract_first("")
+    # DebugPrint(experience_url, letter_url)
     if letter_url != "":
         LetterPageLevel("https:"+letter_url, doc_name, hos_name, dept_name)
     
     process.FinishADoctor()
+    DebugPrint("========doctor finished", doc_name, "index:", doctor_cnt)
     pass
 
 
@@ -97,10 +101,11 @@ def PopADoctor(cnt=0):
 
 
 def Main():
-    # global doctor_cnt
-    # global experience_page_cnt
-    # global letter_page_cnt
+    global doctor_cnt
+    global experience_page_cnt
+    global letter_page_cnt
     doctor_cnt, experience_page_cnt, letter_page_cnt = process.ReadJson()
+    DebugPrint("spider started with doctor_cnt:", doctor_cnt, "experience_page_cnt:", experience_page_cnt, "letter_page_cnt:", letter_page_cnt)
     while True:
         url, hos_name, dept_name = PopADoctor(doctor_cnt)
         doctor_cnt += 1
@@ -111,29 +116,52 @@ def Main():
         DoctorLevel(url, hos_name, dept_name)
 
 def FinishRest(): 
-    time.sleep(60)
-    for i in range(0, 2):           # 对医生未解析成功的就在解析两次
-        process.ResetJson()
-        err.PutDocErrToSrc()
-        Main()
+    # # time.sleep(60)
+    # for i in range(0, 2):           # 对医生未解析成功的就在解析两次
+    #     process.ResetJson()
+    #     err.PutDocErrToSrc()
+    #     Main()
     
-    for i in range(0, 2):
-        err.RestoreExperiencePageErr()
-        with open(RestoreExperiencePageErrLog, "r", encoding="utf-8") as f:
-            url, hos_name, dept_name, doc_name = f.readline().split(",")
-            doc_name = doc_name[:-1]
+    # for i in range(0, 2):
+    #     err.RestoreExperiencePageErr()
+    #     with open(RestoreExperiencePageErrLog, "r", encoding="utf-8") as f:
+    #         while True:
+    #             tmp = f.readline()
+    #             if tmp == None or tmp == "" or tmp == "\n":
+    #                 break
 
-            ExperiencePageLevel(url, doc_name, hos_name, dept_name)
+    #             url, hos_name, dept_name, doc_name = tmp.split(",")
+    #             doc_name = doc_name[:-1]
+
+    #             ExperiencePageLevel(url, doc_name, hos_name, dept_name)
     
-    for i in range(0, 2):
-        err.RestoreLetterPageErr()
+    for i in range(0, 1):
+        # err.RestoreLetterPageErr()
         with open(RestoreLetterPageErrLog, "r", encoding="utf-8") as f:
-            url, hos_name, dept_name, doc_name = f.readline().split(",")
-            doc_name = doc_name[:-1]
+            while True:
+                tmp = f.readline()
+                if tmp == None or tmp == "" or tmp == "\n":
+                    break
 
-            LetterPageLevel(url, doc_name, hos_name, dept_name)
+                url, hos_name, dept_name, doc_name = tmp.split(",")
+                doc_name = doc_name[:-1]
+
+                LetterPageLevel(url, doc_name, hos_name, dept_name)
+    
+    for i in range(0, 1):
+        # err.RestoreExperiencePageErr()
+        with open(RestoreExperiencePageErrLog, "r", encoding="utf-8") as f:
+            while True:
+                tmp = f.readline()
+                if tmp == None or tmp == "" or tmp == "\n":
+                    break
+
+                url, hos_name, dept_name, doc_name = tmp.split(",")
+                doc_name = doc_name[:-1]
+
+                ExperiencePageLevel(url, doc_name, hos_name, dept_name)
     pass
 
 if __name__ == "__main__":
-    Main()
+    # Main()
     FinishRest()
